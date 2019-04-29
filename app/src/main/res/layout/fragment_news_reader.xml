@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.NewsReaderFragment">
+
+    <LinearLayout
+        android:id="@+id/news_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="@color/azulUni"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/logo_u"
+            app:civ_border_color="@color/amarilloUni"
+            app:civ_border_width="2dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TITULO POST"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/news_bar"
+        android:layout_alignParentBottom="true"
+        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:padding="40dp"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed magna non turpis commodo maximus in nec nisl. Fusce blandit convallis ex quis venenatis. Nam pulvinar luctus ultrices. Quisque bibendum, mauris eu dapibus cursus, diam nisl feugiat sapien, in dignissim ante orci sit amet augue. Praesent porta, metus non ornare maximus, mi turpis gravida lacus, ac mattis lorem justo nec metus. Vivamus urna lorem, convallis id risus nec, dapibus dictum nulla. Vivamus non dui a purus pulvinar ultrices sed in leo. Nullam placerat velit quis volutpat fringilla. Duis dolor nisi, lacinia eu enim vitae, bibendum euismod sapien.
+
+Duis molestie cursus enim nec finibus. Fusce ullamcorper consectetur aliquet. Aenean eleifend ultricies ante, sit amet semper nibh viverra sed. Aenean efficitur non odio sit amet pulvinar. Proin suscipit nulla magna, vitae mattis metus varius nec. Mauris sollicitudin odio nec augue pulvinar, in consectetur nunc rutrum. Praesent pellentesque nisl fringilla tellus ullamcorper fringilla.
+
+Nullam iaculis purus odio, sit amet ultricies lacus accumsan sit amet. Ut convallis libero eu quam hendrerit eleifend. Aliquam erat volutpat. Duis vehicula, quam ac molestie suscipit, ipsum enim rhoncus ipsum, ut imperdiet mi lectus eget erat. Vestibulum eu elementum sem. Aenean at tincidunt enim. Suspendisse ut hendrerit nisl, id semper mi. In tellus sem, iaculis ut aliquam at, viverra ut augue. Phasellus imperdiet tellus ac diam accumsan aliquet. Pellentesque nec accumsan risus, sit amet venenatis elit. Aenean a dolor urna.
+
+Suspendisse efficitur sit amet nulla imperdiet eleifend. Ut bibendum aliquet porttitor. In urna turpis, pretium ut rhoncus sed, efficitur sed lectus. Cras semper dapibus nisi, sit amet bibendum orci scelerisque nec. Nam dignissim magna a nibh venenatis, porta congue purus sollicitudin. Mauris sit amet massa a ex sagittis euismod at eu justo. Aliquam eget lacus leo. In id ex condimentum, molestie diam ut, tincidunt ligula. Vivamus dignissim lectus nulla, vitae posuere dui ultrices non. Maecenas vitae tempor ex, vitae varius purus. Etiam tempus elit facilisis ultrices aliquam. Sed semper sollicitudin pretium. Nulla ut leo at ex tempor viverra. Etiam finibus congue mi vel luctus. Nunc placerat velit diam, eget finibus tellus mattis at." />
+
+</RelativeLayout>

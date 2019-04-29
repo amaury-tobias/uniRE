@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity"
+    android:background="@color/azulUni">
+
+    <ImageView
+        android:id="@+id/logo_login_u"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="200dp"
+        app:srcCompat="@mipmap/logo_u" />
+
+    <EditText
+        android:id="@+id/etUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logo_login_u"
+        android:layout_centerInParent="true"
+        android:ems="10"
+        android:hint="Usuario"
+
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        android:textColor="@color/amarilloUni"
+        android:textColorHint="@color/amarilloUni" />
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etUser"
+        android:layout_centerInParent="true"
+        android:ems="10"
+
+        android:hint="Contraseña"
+        android:inputType="textPassword"
+        android:shadowColor="@color/amarilloUni"
+        android:textAlignment="center"
+        android:textColor="@color/amarilloUni"
+        android:textColorHint="@color/amarilloUni" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etPassword"
+
+        android:layout_centerInParent="true"
+        android:text="LOGIN"
+        android:textColor="@color/azulUni" />
+
+</RelativeLayout>
