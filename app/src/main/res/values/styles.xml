@@ -13,4 +13,8 @@
         <item name="android:navigationBarColor">@color/azulUni</item>
     </style>
 
+    <style name="SplashTheme" parent="App">
+        <item name="android:windowBackground">@drawable/splash</item>
+    </style>
+
 </resources>
