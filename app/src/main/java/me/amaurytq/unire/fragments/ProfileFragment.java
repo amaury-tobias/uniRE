@@ -6,10 +6,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
 
+import com.squareup.picasso.Picasso;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import me.amaurytq.unire.R;
 
 public class ProfileFragment extends Fragment {
@@ -21,6 +26,9 @@ public class ProfileFragment extends Fragment {
     private String mParam2;
 
     private profileFragmentListener mListener;
+
+
+    @BindView(R.id.user_picture) ImageView userPicture;
 
     public ProfileFragment() {}
 
@@ -45,7 +53,8 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        ButterKnife.bind(view);
+        ButterKnife.bind(this, view);
+        Picasso.get().load("http://i.imgur.com/DvpvklR.png").into(userPicture);
         return view;
     }
 
@@ -62,7 +71,7 @@ public class ProfileFragment extends Fragment {
             mListener = (profileFragmentListener) context;
         } else {
             //throw new RuntimeException(context.toString()
-                   // + " must implement OnFragmentInteractionListener");
+            // + " must implement OnFragmentInteractionListener");
         }
     }
 
