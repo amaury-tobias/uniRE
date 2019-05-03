@@ -26,6 +26,9 @@ import butterknife.OnClick;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String PARAM_MATRICULA = "matricula";
+    private static final String PARAM_PASSWORD = "password";
+
     @BindView(R.id.etUser) EditText etUser;
     @BindView(R.id.etPassword) EditText etPassword;
 
@@ -59,8 +62,8 @@ public class LoginActivity extends AppCompatActivity {
         String REQUEST_TAG = "me.amaurytq.unire.volleyLoginRequest";
 
         JSONObject postParams = new JSONObject();
-        postParams.put("username", etUser.getText());
-        postParams.put("password", etPassword.getText());
+        postParams.put(PARAM_MATRICULA, etUser.getText());
+        postParams.put(PARAM_PASSWORD, etPassword.getText());
 
         JsonObjectRequest jsonObjectReq = new JsonObjectRequest(
                 Request.Method.POST,
@@ -81,7 +84,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void errorHandler (VolleyError error) {
         dismissProgressDialog();
-        showToast("Error al conectarse con el servidor");
+        error.printStackTrace();
+        showToast("Verifique sus credenciales o intente de nuevo mas tarde");
     }
 
     private void responseHandler (JSONObject response) {
@@ -89,17 +93,19 @@ public class LoginActivity extends AppCompatActivity {
         String toastMessage = "";
         String token;
         try {
-            String message = response.getString("message");
-            if (message.equals("ok")) {
-                toastMessage = "Bienvenido";
-                token = response.getString("token");
-                SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-                sharedPreferences.edit().putString(Constants.BEARER_TOKEN, token).apply();
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            }
-            if (message.equals("error")) toastMessage = "Verifique sus credenciales";
+            token = response.getString("token");
+
+            toastMessage = "Bienvenido";
+            SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+            sharedPreferences.edit().putString(Constants.BEARER_TOKEN, token).apply();
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
         } catch (JSONException e) {
             e.printStackTrace();
+            toastMessage = "Error al obtener el token de sesión intente de nuevo mas tarde";
+        } catch (Exception e) {
+            e.printStackTrace();
+            toastMessage = "Verifique sus credenciales";
         } finally {
             showToast(toastMessage);
         }

@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.amaurytq.unire.R;
 
@@ -29,6 +30,11 @@ public class ProfileFragment extends Fragment {
 
 
     @BindView(R.id.user_picture) ImageView userPicture;
+
+    @OnClick(R.id.user_picture)
+    void onPictureClick() {
+        NewsReaderBottomFragment.newInstance("YO MERO", "asdasfasdf").show(getChildFragmentManager(), "dialog");
+    }
 
     public ProfileFragment() {}
 
@@ -54,7 +60,11 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
-        Picasso.get().load("http://i.imgur.com/DvpvklR.png").into(userPicture);
+
+
+
+
+        Picasso.get().load("http://192.168.1.46:3300/a.jpg").into(userPicture);
         return view;
     }
 
