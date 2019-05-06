@@ -48,17 +48,16 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.btnLogin)
     public void onBtnLoginClick(View view) {
-        String url = "http://192.168.1.46:3300/login";
         try {
             if (!etUser.getText().toString().isEmpty() && !etPassword.getText().toString().isEmpty())
-                volleyLoginRequest(url);
+                volleyLoginRequest();
             else showToast("Ingrese sus credenciales");
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public void volleyLoginRequest(String url) throws JSONException {
+    public void volleyLoginRequest() throws JSONException {
         String REQUEST_TAG = "me.amaurytq.unire.volleyLoginRequest";
 
         JSONObject postParams = new JSONObject();
@@ -67,7 +66,8 @@ public class LoginActivity extends AppCompatActivity {
 
         JsonObjectRequest jsonObjectReq = new JsonObjectRequest(
                 Request.Method.POST,
-                url, postParams,
+                Constants.LOGIN_URL,
+                postParams,
                 this::responseHandler,
                 this::errorHandler
         ) {
@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(jsonObjectReq, REQUEST_TAG);
     }
 
-    private void errorHandler (VolleyError error) {
+    private void errorHandler(VolleyError error) {
         dismissProgressDialog();
         error.printStackTrace();
         showToast("Verifique sus credenciales o intente de nuevo mas tarde");

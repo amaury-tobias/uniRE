@@ -23,7 +23,7 @@
         android:background="@color/white">
 
         <TextView
-            android:id="@+id/tvApplicationLabel"
+            android:id="@+id/achievement_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
@@ -34,6 +34,7 @@
             tools:text="Coleccionista" />
 
         <TextView
+            android:id="@+id/achievement_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"

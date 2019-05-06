@@ -6,73 +6,132 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.amaurytq.unire.AppController;
+import me.amaurytq.unire.Constants;
+import me.amaurytq.unire.Models.Noticia;
+import me.amaurytq.unire.Models.NoticiasAdapter;
 import me.amaurytq.unire.R;
 
-public class NewsFragment extends Fragment {
+public class NewsFragment extends Fragment implements NoticiasAdapter.NoticiasListener {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
+    private NoticiasAdapter adapter;
+    @BindView(R.id.NewsList) RecyclerView newsList;
+    @BindView(R.id.swipeNewsList) SwipeRefreshLayout refreshLayout;
 
     public NewsFragment() {}
 
-    public static NewsFragment newInstance(String param1, String param2) {
+    public static NewsFragment newInstance() {
         NewsFragment fragment = new NewsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
-        ButterKnife.bind(view);
+        ButterKnife.bind(this, view);
+        adapter = new NoticiasAdapter(this);
+        newsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        newsList.addItemDecoration(new DividerItemDecoration(
+                Objects.requireNonNull(getContext()),
+                DividerItemDecoration.VERTICAL));
+        newsList.setAdapter(adapter);
+
+        refreshLayout.setOnRefreshListener(() -> {
+            refreshLayout.setRefreshing(true);
+            volleyGetNoticias();
+            refreshLayout.setRefreshing(false);
+        });
         return view;
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    private void volleyGetNoticias() {
+        String REQUEST_TAG = "me.amaurytq.unire.volleyGetNoticias";
+        String token = Objects.requireNonNull(getContext()).
+                getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+                .getString(Constants.BEARER_TOKEN, "");
+
+        JsonArrayRequest request = new JsonArrayRequest(
+                Request.Method.GET,
+                Constants.NOTICIAS_URL,
+                null,
+                this::responseHandler,
+                this::errorHandler
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer ".concat(token));
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+        AppController.getInstance().addToRequestQueue(request, REQUEST_TAG);
+    }
+
+    private void responseHandler(JSONArray response) {
+        List <Noticia> noticias = new ArrayList<>();
+        try {
+            for (int i = 0; i < response.length(); i++) {
+                JSONObject jsonObject = response.getJSONObject(i);
+                Noticia noticia= new Noticia();
+                noticia.title = jsonObject.getString("title");
+                noticia.author = jsonObject.getString("author");
+                noticia.shortBody = jsonObject.getString("shortBody");
+                noticia.body = jsonObject.getString("body");
+                noticias.add(noticia);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            adapter.setItems(noticias);
+            adapter.notifyDataSetChanged();
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            //throw new RuntimeException(context.toString()
-            //        + " must implement OnFragmentInteractionListener");
-        }
+    private void errorHandler(VolleyError error) {
+        error.printStackTrace();
+        showToast("Error al obtener los datos de perfil");
+    }
+
+    private void showToast (String text) {
+        Toast.makeText(getActivity(), text, Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public void onClick(Noticia item) {
+        BottomSheetDialogFragment bsdFragment =
+                NewsReaderBottomFragment.newInstance(item.title, item.author, item.body);
+        bsdFragment.show(getChildFragmentManager(), "NEWS_READER");
     }
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
-    }
 }

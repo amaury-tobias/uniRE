@@ -17,13 +17,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.amaurytq.unire.fragments.NavigationFragment;
 import me.amaurytq.unire.fragments.NewsFragment;
 import me.amaurytq.unire.fragments.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    //@BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.viewpager) ViewPager viewPager;
     @BindView(R.id.tabs) TabLayout tabLayout;
 
@@ -36,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        //setSupportActionBar(toolbar);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
@@ -51,13 +49,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPageAdapter adapter = new ViewPageAdapter(getSupportFragmentManager());
-        adapter.addFragment(ProfileFragment.newInstance("", ""), "TÚ");
-        adapter.addFragment(NewsFragment.newInstance("", ""), "NOTICIAS");
-        adapter.addFragment(ProfileFragment.newInstance("", ""), "LUGARES");
-        adapter.addFragment(ProfileFragment.newInstance("", ""), "AJUSTES");
+        adapter.addFragment(ProfileFragment.newInstance(), "TÚ");
+        adapter.addFragment(NewsFragment.newInstance(), "NOTICIAS");
+        adapter.addFragment(NavigationFragment.newInstance(), "LUGARES");
+        adapter.addFragment(ProfileFragment.newInstance(), "AJUSTES");
         viewPager.setAdapter(adapter);
-        // LUGARES
-        // AJUSTES
     }
 
     class ViewPageAdapter extends FragmentPagerAdapter {

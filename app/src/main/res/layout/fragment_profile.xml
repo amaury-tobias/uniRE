@@ -37,7 +37,7 @@
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="USUARIO"
+            tools:text="USUARIO"
             android:textColor="@color/white"
             android:textSize="24sp" />
 
@@ -45,14 +45,13 @@
             android:id="@+id/user_points"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="PUNTOS: 35"
+            tools:text="PUNTOS: 35"
             android:textColor="@color/white"
             android:textSize="18sp" />
     </LinearLayout>
 
-
-
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/user_achievements"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/user_bar"
