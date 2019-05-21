@@ -13,6 +13,20 @@
         <item name="android:navigationBarColor">@color/azulUni</item>
     </style>
 
+    <style name="AppBlack" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:background">@color/colorPrimaryDark</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <item name="android:statusBarColor">@color/azulUni</item>
+        <item name="android:navigationBarColor">@color/azulUni</item>
+    </style>
+
     <style name="SplashTheme" parent="App">
         <item name="android:windowBackground">@drawable/splash</item>
     </style>

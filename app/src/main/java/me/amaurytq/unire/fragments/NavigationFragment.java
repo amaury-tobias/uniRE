@@ -1,6 +1,10 @@
 package me.amaurytq.unire.fragments;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -8,9 +12,12 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -27,6 +34,7 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -38,9 +46,11 @@ public class NavigationFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    @BindView(R.id.map) MapView mapView;
+    @BindView(R.id.map)
+    MapView mapView;
 
-    public NavigationFragment() {}
+    public NavigationFragment() {
+    }
 
     public static NavigationFragment newInstance() {
         NavigationFragment fragment = new NavigationFragment();
@@ -78,15 +88,22 @@ public class NavigationFragment extends Fragment {
         mScaleBarOverlay.setScaleBarOffset(dm.widthPixels / 2, 10);
         mapView.getOverlays().add(mScaleBarOverlay);
 
+        List<String> descriptions = new ArrayList<>();
+        descriptions.add("Centro de recoleccion de bottellas para la ayuda de muchos niños");
+        descriptions.add("Centro de recoleccion de carton y papel");
+        descriptions.add("Centro de recoleccion y reciclaje de electronicos, ofrece recompensas\n*1Kg: 5 Puntos\n*2Kg: 15 puntos");
         //ITEMS
         ArrayList<OverlayItem> items = new ArrayList<>();
-        items.add(new OverlayItem("Title", "Description", new GeoPoint(25.727171, -100.311819)));
-        items.add(new OverlayItem("FACPyA", "Description", new GeoPoint(25.727335, -100.309330)));
-        items.add(new OverlayItem("FCFM", "Centro de recoleccion de desechos tecnoloógicos", new GeoPoint(25.725398, -100.315279)));
+        items.add(new OverlayItem("FOD", "Botellas", new GeoPoint(25.727171, -100.311819)));
+        items.add(new OverlayItem("FACPyA", "Papel y cartón", new GeoPoint(25.727335, -100.309330)));
+        items.add(new OverlayItem("FCFM", "Desechos tecnoloógicos", new GeoPoint(25.725398, -100.315279)));
         ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<>(items,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
+                        BottomSheetDialogFragment bsdFragment =
+                                NewsReaderBottomFragment.newInstance(item.getTitle(), item.getSnippet(), descriptions.get(index));
+                        bsdFragment.show(getChildFragmentManager(), "NEWS_READER");
                         return true;
                     }
 
@@ -94,17 +111,42 @@ public class NavigationFragment extends Fragment {
                     public boolean onItemLongPress(final int index, final OverlayItem item) {
                         return false;
                     }
-                }, Objects.requireNonNull(getActivity()));
+                }, Objects.requireNonNull(ctx));
         mOverlay.setFocusItemsOnTap(true);
         mapView.getOverlays().add(mOverlay);
 
-        //POSICION
+        locationManager = (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE);
+
+
+
+
+
+        //POSITION
         IMapController mapController = mapView.getController();
-        mapController.setZoom(18f);
-        GeoPoint startPoint = new GeoPoint(25.727171, -100.311819);
-        mapController.setCenter(startPoint);
+        mapController.setZoom(17f);
+        GeoPoint startPoint = getCurrentLocation();
+        mapController.animateTo(startPoint);
         return view;
     }
+
+    private GeoPoint getCurrentLocation() throws SecurityException{
+        Location location = null;
+        List<String> providers = locationManager.getProviders(true);
+
+        for (String provider : providers) {
+
+            Location temp = locationManager.getLastKnownLocation(provider);
+            if (temp== null)
+                continue;
+            if (location == null || temp.getAccuracy() < location.getAccuracy())
+                location = temp;
+        }
+        if (location == null)
+            return new GeoPoint(25.727171, -100.311819);
+        return new GeoPoint(location.getAltitude(), location.getLongitude());
+    }
+
+    LocationManager locationManager;
 
     @Override
     public void onResume() {

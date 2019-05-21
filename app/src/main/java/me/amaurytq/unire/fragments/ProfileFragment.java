@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -58,7 +59,7 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
         adapter = new AchievementAdapter();
@@ -123,7 +124,8 @@ public class ProfileFragment extends Fragment {
     }
 
     private void showToast (String text) {
-        Toast.makeText(getActivity(), text, Toast.LENGTH_LONG).show();
+        if (getActivity() != null)
+            Toast.makeText(getActivity(), text, Toast.LENGTH_LONG).show();
     }
 
     @Override

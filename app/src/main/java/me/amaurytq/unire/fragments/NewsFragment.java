@@ -66,6 +66,11 @@ public class NewsFragment extends Fragment implements NoticiasAdapter.NoticiasLi
                 DividerItemDecoration.VERTICAL));
         newsList.setAdapter(adapter);
 
+        if (AppController.getInstance().getNoticias() != null) {
+            adapter.setItems(AppController.getInstance().getNoticias());
+            adapter.notifyDataSetChanged();
+        }
+
         refreshLayout.setOnRefreshListener(() -> {
             refreshLayout.setRefreshing(true);
             volleyGetNoticias();
@@ -113,7 +118,8 @@ public class NewsFragment extends Fragment implements NoticiasAdapter.NoticiasLi
         } catch (JSONException e) {
             e.printStackTrace();
         } finally {
-            adapter.setItems(noticias);
+            AppController.getInstance().setNoticias(noticias);
+            adapter.setItems(AppController.getInstance().getNoticias());
             adapter.notifyDataSetChanged();
         }
     }

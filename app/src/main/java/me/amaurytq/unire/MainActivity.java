@@ -1,5 +1,6 @@
 package me.amaurytq.unire;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,8 +21,9 @@ import butterknife.ButterKnife;
 import me.amaurytq.unire.fragments.NavigationFragment;
 import me.amaurytq.unire.fragments.NewsFragment;
 import me.amaurytq.unire.fragments.ProfileFragment;
+import me.amaurytq.unire.fragments.SettingsFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SettingsFragment.OnFragmentSettingsListener {
 
     @BindView(R.id.viewpager) ViewPager viewPager;
     @BindView(R.id.tabs) TabLayout tabLayout;
@@ -52,8 +54,17 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(ProfileFragment.newInstance(), "TÚ");
         adapter.addFragment(NewsFragment.newInstance(), "NOTICIAS");
         adapter.addFragment(NavigationFragment.newInstance(), "LUGARES");
-        adapter.addFragment(ProfileFragment.newInstance(), "AJUSTES");
+        adapter.addFragment(SettingsFragment.newInstance(), "AJUSTES");
         viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public void cerrarSesion() {
+        getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, MODE_PRIVATE)
+                .edit()
+                .putString(Constants.BEARER_TOKEN, "")
+                .apply();
+        finish();
     }
 
     class ViewPageAdapter extends FragmentPagerAdapter {

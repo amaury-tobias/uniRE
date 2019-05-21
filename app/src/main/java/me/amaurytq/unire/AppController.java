@@ -8,12 +8,25 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
+import java.util.List;
+
+import me.amaurytq.unire.Models.Noticia;
+
 public class AppController extends Application {
 
     public static final String TAG = AppController.class.getSimpleName();
 
     private RequestQueue mRequestQueue;
-    private ImageLoader mImageLoader;
+
+    public List<Noticia> getNoticias() {
+        return noticias;
+    }
+
+    public void setNoticias(List<Noticia> noticias) {
+        this.noticias = noticias;
+    }
+
+    private List<Noticia> noticias;
 
     private static AppController mInstance;
 
